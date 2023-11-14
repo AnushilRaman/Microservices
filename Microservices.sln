@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FrontEnd", "FrontEnd", "{BCA9FF28-60F4-48EA-962B-7A2A4476D537}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateway", "Gateway", "{E6CBF5D2-9D6A-4A33-B014-1B1E56F6522D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Intigration", "Intigration", "{491CEC2F-2C41-4FA2-BF90-A898F61FD4D3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{DFF082A2-F451-4A81-BC04-FD4E3391264B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microservices.Services.CouponAPI", "Microservices.Services.CouponAPI\Microservices.Services.CouponAPI.csproj", "{2D07F26F-3747-4A4D-854A-FDDEC4568B0C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2D07F26F-3747-4A4D-854A-FDDEC4568B0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D07F26F-3747-4A4D-854A-FDDEC4568B0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D07F26F-3747-4A4D-854A-FDDEC4568B0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D07F26F-3747-4A4D-854A-FDDEC4568B0C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2D07F26F-3747-4A4D-854A-FDDEC4568B0C} = {DFF082A2-F451-4A81-BC04-FD4E3391264B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7DCA2972-FF92-41DF-B578-356AFDDFDA70}
+	EndGlobalSection
+EndGlobal
