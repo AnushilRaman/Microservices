@@ -11,7 +11,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Intigration", "Intigration"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{DFF082A2-F451-4A81-BC04-FD4E3391264B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microservices.Services.CouponAPI", "Microservices.Services.CouponAPI\Microservices.Services.CouponAPI.csproj", "{2D07F26F-3747-4A4D-854A-FDDEC4568B0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microservices.Services.CouponAPI", "Microservices.Services.CouponAPI\Microservices.Services.CouponAPI.csproj", "{2D07F26F-3747-4A4D-854A-FDDEC4568B0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microservices.Web", "Microservices.Web\Microservices.Web.csproj", "{5B9C9B47-DCED-4C81-824F-E2DCBCF6C4EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,12 +25,17 @@ Global
 		{2D07F26F-3747-4A4D-854A-FDDEC4568B0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D07F26F-3747-4A4D-854A-FDDEC4568B0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D07F26F-3747-4A4D-854A-FDDEC4568B0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B9C9B47-DCED-4C81-824F-E2DCBCF6C4EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B9C9B47-DCED-4C81-824F-E2DCBCF6C4EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B9C9B47-DCED-4C81-824F-E2DCBCF6C4EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B9C9B47-DCED-4C81-824F-E2DCBCF6C4EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2D07F26F-3747-4A4D-854A-FDDEC4568B0C} = {DFF082A2-F451-4A81-BC04-FD4E3391264B}
+		{5B9C9B47-DCED-4C81-824F-E2DCBCF6C4EF} = {BCA9FF28-60F4-48EA-962B-7A2A4476D537}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7DCA2972-FF92-41DF-B578-356AFDDFDA70}
