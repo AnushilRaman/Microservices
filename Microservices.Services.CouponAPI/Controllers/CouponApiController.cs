@@ -2,8 +2,6 @@
 using Microservices.Services.CouponAPI.Data;
 using Microservices.Services.CouponAPI.Models.Dto;
 using Microservices.Services.CouponAPI.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
