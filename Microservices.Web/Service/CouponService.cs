@@ -14,14 +14,23 @@ namespace Microservices.Web.Service
             this.baseService = baseService;
         }
 
-        public Task<ResponseDto?> CreateCouponAsync(CouponDto couponDto)
+        public async Task<ResponseDto?> CreateCouponAsync(CouponDto couponDto)
         {
-            throw new NotImplementedException();
+            return await baseService.SendAsync(new RequestDto()
+            {
+                apiType = Utility.SD.ApiType.POST,
+                Data = couponDto,
+                Url = Utility.SD.CouponApiBase + api + "/CouponApi"
+            });
         }
 
-        public Task<ResponseDto?> DeleteCouponAsync(int id)
+        public async Task<ResponseDto?> DeleteCouponAsync(int id)
         {
-            throw new NotImplementedException();
+            return await baseService.SendAsync(new RequestDto()
+            {
+                apiType = Utility.SD.ApiType.DELETE,
+                Url = Utility.SD.CouponApiBase + api + "/CouponApi" + id
+            });
         }
 
         public async Task<ResponseDto?> GetAllCouponAsync()
@@ -33,9 +42,13 @@ namespace Microservices.Web.Service
             });
         }
 
-        public Task<ResponseDto?> GetCouponAsync(string couponCode)
+        public async Task<ResponseDto?> GetCouponAsync(string couponCode)
         {
-            throw new NotImplementedException();
+            return await baseService.SendAsync(new RequestDto()
+            {
+                apiType = Utility.SD.ApiType.GET,
+                Url = Utility.SD.CouponApiBase + api + "/CouponApi" + couponCode
+            });
         }
 
         public Task<ResponseDto?> GetCouponByIdAsync(int id)
