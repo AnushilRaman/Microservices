@@ -7,5 +7,18 @@ namespace Microservices.Services.CouponAPI.Controllers
     [ApiController]
     public class CouponApiController : ControllerBase
     {
+        [HttpGet]
+        [Route("Get")]
+        public IActionResult Get()
+        {
+            return Ok("Without paramter");
+        }
+        [HttpGet]
+        [Route("Getstring")]
+        public IActionResult Getstring(string message)
+        {
+            message = "With Paramter";
+            return Ok(message);
+        }
     }
 }
