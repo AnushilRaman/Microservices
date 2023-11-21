@@ -1,5 +1,6 @@
 ﻿using Microservices.Web.Models;
 using Microservices.Web.Service.IService;
+using Microservices.Web.Utility;
 using System.Reflection.Metadata;
 
 namespace Microservices.Web.Service
@@ -7,7 +8,7 @@ namespace Microservices.Web.Service
     public class CouponService : ICouponService
     {
         private readonly IBaseService baseService;
-        private const string api = "/api";
+        private const string api = "/api/";
 
         public CouponService(IBaseService baseService)
         {
@@ -20,7 +21,7 @@ namespace Microservices.Web.Service
             {
                 apiType = Utility.SD.ApiType.POST,
                 Data = couponDto,
-                Url = Utility.SD.CouponApiBase + api + "/CouponApi"
+                Url = Utility.SD.CouponApiBase + api + "CouponApi"
             });
         }
 
@@ -29,7 +30,7 @@ namespace Microservices.Web.Service
             return await baseService.SendAsync(new RequestDto()
             {
                 apiType = Utility.SD.ApiType.DELETE,
-                Url = Utility.SD.CouponApiBase + api + "/CouponApi" + id
+                Url = Utility.SD.CouponApiBase + api + "CouponApi/" + id
             });
         }
 
@@ -38,7 +39,7 @@ namespace Microservices.Web.Service
             return await baseService.SendAsync(new RequestDto()
             {
                 apiType = Utility.SD.ApiType.GET,
-                Url = Utility.SD.CouponApiBase + api + "/CouponApi"
+                Url = Utility.SD.CouponApiBase + api + "CouponApi"
             });
         }
 
@@ -47,18 +48,27 @@ namespace Microservices.Web.Service
             return await baseService.SendAsync(new RequestDto()
             {
                 apiType = Utility.SD.ApiType.GET,
-                Url = Utility.SD.CouponApiBase + api + "/CouponApi" + couponCode
+                Url = Utility.SD.CouponApiBase + api + "CouponApi/" + couponCode
             });
         }
 
-        public Task<ResponseDto?> GetCouponByIdAsync(int id)
+        public async Task<ResponseDto?> GetCouponByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await baseService.SendAsync(new RequestDto()
+            {
+                apiType = SD.ApiType.GET,
+                Url = SD.CouponApiBase + api + "couponApi/" + id
+            });
         }
 
-        public Task<ResponseDto?> UpdateCouponAsync(CouponDto couponDto)
+        public async Task<ResponseDto?> UpdateCouponsAsync(CouponDto couponDto)
         {
-            throw new NotImplementedException();
+            return await baseService.SendAsync(new RequestDto()
+            {
+                apiType = SD.ApiType.PUT,
+                Data = couponDto,
+                Url = SD.CouponApiBase + api + "couponApi"
+            });
         }
     }
 }
