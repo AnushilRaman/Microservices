@@ -10,12 +10,14 @@ namespace Microservices.Services.AuthAPI.Service
         private readonly AppDbContext db;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
+        private readonly IJwtTokenGenerator jwtTokenGenerator;
 
-        public AuthService(AppDbContext db, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public AuthService(AppDbContext db, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager,IJwtTokenGenerator jwtTokenGenerator)
         {
             this.db = db;
             this.userManager = userManager;
             this.roleManager = roleManager;
+            this.jwtTokenGenerator = jwtTokenGenerator;
         }
         public async Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
         {
@@ -25,6 +27,10 @@ namespace Microservices.Services.AuthAPI.Service
             {
                 return new LoginResponseDto() { User = null, Token = string.Empty };
             }
+
+            ////// Genrate the JWT token
+            var token = jwtTokenGenerator.GenerateToken(user);
+
 
             UserDto userDto = new()
             {
@@ -36,7 +42,7 @@ namespace Microservices.Services.AuthAPI.Service
             LoginResponseDto loginResponseDto = new LoginResponseDto()
             {
                 User = userDto,
-                Token = string.Empty,
+                Token = token,
             };
             return loginResponseDto;
         }
