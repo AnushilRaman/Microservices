@@ -17,9 +17,28 @@ namespace Microservices.Services.AuthAPI.Service
             this.userManager = userManager;
             this.roleManager = roleManager;
         }
-        public Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
+        public async Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
         {
-            throw new NotImplementedException();
+            var user = db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == loginRequestDto.UserName.ToLower());
+            bool isValid = await userManager.CheckPasswordAsync(user, loginRequestDto.Password);
+            if (user == null || !isValid)
+            {
+                return new LoginResponseDto() { User = null, Token = string.Empty };
+            }
+
+            UserDto userDto = new()
+            {
+                Email = user.Email,
+                Id = user.Id,
+                Name = user.Name,
+                PhoneNumer = user.PhoneNumber
+            };
+            LoginResponseDto loginResponseDto = new LoginResponseDto()
+            {
+                User = userDto,
+                Token = string.Empty,
+            };
+            return loginResponseDto;
         }
 
         public async Task<string> Register(RegistrationRequestDto registrationRequestDto)

@@ -32,9 +32,17 @@ namespace Microservices.Services.AuthAPI.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login()
+        public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
         {
-            return Ok();
+            var loginResponse = await authService.Login(loginRequestDto);
+            if (loginResponse.User == null)
+            {
+                responseDto.IsSuccess = true;
+                responseDto.Message = "Username or Password is incorrect";
+                return BadRequest(responseDto);
+            }
+            responseDto.Result = loginResponse;
+            return Ok(responseDto);
         }
     }
 }
