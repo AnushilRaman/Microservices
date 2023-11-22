@@ -1,5 +1,8 @@
 using Microservices.Services.AuthAPI;
 using Microservices.Services.AuthAPI.Data;
+using Microservices.Services.AuthAPI.Models;
+using Microservices.Services.AuthAPI.Service;
+using Microservices.Services.AuthAPI.Service.IService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +19,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("ApiSettings:JwtOptions"));
+
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+builder.Services.AddScoped<IAuthService,AuthService>();
 
 var app = builder.Build();
 

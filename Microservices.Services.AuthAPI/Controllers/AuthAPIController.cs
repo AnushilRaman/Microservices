@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microservices.Services.AuthAPI.Models.Dto;
+using Microservices.Services.AuthAPI.Service.IService;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Microservices.Services.AuthAPI.Controllers
@@ -7,10 +9,26 @@ namespace Microservices.Services.AuthAPI.Controllers
     [ApiController]
     public class AuthAPIController : ControllerBase
     {
-        [HttpPost("register")]
-        public async Task<IActionResult> Register()
+        private readonly IAuthService authService;
+        protected ResponseDto responseDto;
+
+        public AuthAPIController(IAuthService authService)
         {
-            return Ok();
+            this.authService = authService;
+            responseDto = new();
+        }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegistrationRequestDto model)
+        {
+            var errorMessage = await authService.Register(model);
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                responseDto.IsSuccess = true;
+                responseDto.Message = errorMessage;
+                return BadRequest(responseDto);
+            }
+            return Ok(responseDto);
         }
 
         [HttpPost("login")]
