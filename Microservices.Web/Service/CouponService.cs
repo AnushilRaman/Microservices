@@ -1,6 +1,7 @@
 ﻿using Microservices.Web.Models;
 using Microservices.Web.Service.IService;
 using Microservices.Web.Utility;
+using System;
 using System.Reflection.Metadata;
 
 namespace Microservices.Web.Service
@@ -8,7 +9,6 @@ namespace Microservices.Web.Service
     public class CouponService : ICouponService
     {
         private readonly IBaseService baseService;
-        private const string api = "/api/";
 
         public CouponService(IBaseService baseService)
         {
@@ -19,9 +19,9 @@ namespace Microservices.Web.Service
         {
             return await baseService.SendAsync(new RequestDto()
             {
-                apiType = Utility.SD.ApiType.POST,
+                apiType = SD.ApiType.POST,
                 Data = couponDto,
-                Url = Utility.SD.CouponApiBase + api + "CouponApi"
+                Url = SD.CouponApiBase + SD.ApiName.api + SD.ApiName.CouponApi
             });
         }
 
@@ -29,8 +29,8 @@ namespace Microservices.Web.Service
         {
             return await baseService.SendAsync(new RequestDto()
             {
-                apiType = Utility.SD.ApiType.DELETE,
-                Url = Utility.SD.CouponApiBase + api + "CouponApi/" + id
+                apiType = SD.ApiType.DELETE,
+                Url = SD.CouponApiBase + "/" + SD.ApiName.api + "/" + SD.ApiName.CouponApi + "/" + id
             });
         }
 
@@ -38,8 +38,8 @@ namespace Microservices.Web.Service
         {
             return await baseService.SendAsync(new RequestDto()
             {
-                apiType = Utility.SD.ApiType.GET,
-                Url = Utility.SD.CouponApiBase + api + "CouponApi"
+                apiType = SD.ApiType.GET,
+                Url = SD.CouponApiBase + "/" + SD.ApiName.api + "/" + SD.ApiName.CouponApi
             });
         }
 
@@ -47,8 +47,8 @@ namespace Microservices.Web.Service
         {
             return await baseService.SendAsync(new RequestDto()
             {
-                apiType = Utility.SD.ApiType.GET,
-                Url = Utility.SD.CouponApiBase + api + "CouponApi/" + couponCode
+                apiType = SD.ApiType.GET,
+                Url = SD.CouponApiBase +"/" +SD.ApiName.api + "/" + SD.ApiName.CouponApi + "/" + couponCode
             });
         }
 
@@ -57,7 +57,7 @@ namespace Microservices.Web.Service
             return await baseService.SendAsync(new RequestDto()
             {
                 apiType = SD.ApiType.GET,
-                Url = SD.CouponApiBase + api + "couponApi/" + id
+                Url = SD.CouponApiBase + "/" + SD.ApiName.api + "/" + SD.ApiName.CouponApi + "/" + id
             });
         }
 
@@ -67,7 +67,7 @@ namespace Microservices.Web.Service
             {
                 apiType = SD.ApiType.PUT,
                 Data = couponDto,
-                Url = SD.CouponApiBase + api + "couponApi"
+                Url = SD.CouponApiBase + "/" + SD.ApiName.api + "/" + SD.ApiName.CouponApi
             });
         }
     }
