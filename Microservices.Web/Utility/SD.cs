@@ -2,20 +2,25 @@
 {
     public class SD
     {
-        public static string CouponApiBase {  get; set; }
-        public static string AuthApiBase {  get; set; }
+        public static string CouponApiBase { get; set; }
+        public static string AuthApiBase { get; set; }
+
+        public const string RoleAdmin = "ADMIN";
+        public const string RoleCustomer = "CUSTOMER";
+
+
 
         public enum ApiName
         {
             api,
             CouponApi,
-            AuthApi
+            AuthAPI
         }
 
         public enum ApiType
         {
             GET,
-            POST, 
+            POST,
             PUT,
             DELETE
         }

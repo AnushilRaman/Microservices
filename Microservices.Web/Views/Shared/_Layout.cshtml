@@ -32,11 +32,22 @@
                                 Content
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                <li><a class="dropdown-item" asp-controller="Coupon" asp-action="CouponIndex">Coupon List</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Coupon" asp-action="CouponIndex">Coupon List</a>
+                                </li>
                             </ul>
                         </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        @if (!User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Auth" asp-action="Login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Auth" asp-action="Register">Register</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

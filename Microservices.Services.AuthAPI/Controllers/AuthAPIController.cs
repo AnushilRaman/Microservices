@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Microservices.Services.AuthAPI.Controllers
 {
-    [Route("api/auth")]
+    [Route("api/AuthAPI")]
     [ApiController]
     public class AuthAPIController : ControllerBase
     {
@@ -48,7 +48,7 @@ namespace Microservices.Services.AuthAPI.Controllers
         [HttpPost("AssignRole")]
         public async Task<IActionResult> AssignRole([FromBody] RegistrationRequestDto loginRequestDto)
         {
-            var loginResponse = await authService.AssignRole(loginRequestDto.Email,loginRequestDto.RoleName.ToUpper());
+            var loginResponse = await authService.AssignRole(loginRequestDto.Email,loginRequestDto.Role.ToUpper());
             if (!loginResponse)
             {
                 responseDto.IsSuccess = true;
