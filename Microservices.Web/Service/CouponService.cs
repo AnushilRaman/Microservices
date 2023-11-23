@@ -21,7 +21,7 @@ namespace Microservices.Web.Service
             {
                 apiType = SD.ApiType.POST,
                 Data = couponDto,
-                Url = SD.CouponApiBase + SD.ApiName.api + SD.ApiName.CouponApi
+                Url = SD.CouponApiBase + "/" + SD.ApiName.api + "/" + SD.ApiName.CouponApi
             });
         }
 
@@ -48,7 +48,7 @@ namespace Microservices.Web.Service
             return await baseService.SendAsync(new RequestDto()
             {
                 apiType = SD.ApiType.GET,
-                Url = SD.CouponApiBase +"/" +SD.ApiName.api + "/" + SD.ApiName.CouponApi + "/" + couponCode
+                Url = SD.CouponApiBase + "/" + SD.ApiName.api + "/" + SD.ApiName.CouponApi + "/" + couponCode
             });
         }
 
