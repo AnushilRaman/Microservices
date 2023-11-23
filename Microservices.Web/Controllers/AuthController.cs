@@ -3,6 +3,7 @@ using Microservices.Web.Service.IService;
 using Microservices.Web.Utility;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 
 namespace Microservices.Web.Controllers
 {
@@ -21,6 +22,24 @@ namespace Microservices.Web.Controllers
             LoginRequestDto loginRequestDto = new LoginRequestDto();
             return View(loginRequestDto);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginRequestDto loginRequestDto)
+        {
+            ResponseDto response = await authService.LoginAsync(loginRequestDto);
+            if (response != null && response.IsSuccess)
+            {
+                LoginResponseDto loginResponseDto = JsonConvert.DeserializeObject<LoginResponseDto>(Convert.ToString(response.Result));
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                ModelState.AddModelError("Customerror", response.Message);
+                return View(loginRequestDto);
+            }
+        }
+
+        [HttpGet]
 
         [HttpGet]
         public IActionResult Register()
@@ -46,7 +65,7 @@ namespace Microservices.Web.Controllers
                     registrationRequestDto.Role = SD.RoleCustomer;
                 }
                 assignRole = await authService.AssignRoleAsync(registrationRequestDto);
-                if (assignRole != null && assignRole.IsSuccess) 
+                if (assignRole != null && assignRole.IsSuccess)
                 {
                     TempData["successMessage"] = "Registration Successful";
                     return RedirectToAction(nameof(Login));

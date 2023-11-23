@@ -24,7 +24,7 @@ namespace Microservices.Services.AuthAPI.Controllers
             var errorMessage = await authService.Register(model);
             if (!string.IsNullOrEmpty(errorMessage))
             {
-                responseDto.IsSuccess = true;
+                responseDto.IsSuccess = false;
                 responseDto.Message = errorMessage;
                 return BadRequest(responseDto);
             }
@@ -37,7 +37,7 @@ namespace Microservices.Services.AuthAPI.Controllers
             var loginResponse = await authService.Login(loginRequestDto);
             if (loginResponse.User == null)
             {
-                responseDto.IsSuccess = true;
+                responseDto.IsSuccess = false;
                 responseDto.Message = "Username or Password is incorrect";
                 return BadRequest(responseDto);
             }
@@ -51,7 +51,7 @@ namespace Microservices.Services.AuthAPI.Controllers
             var loginResponse = await authService.AssignRole(loginRequestDto.Email,loginRequestDto.Role.ToUpper());
             if (!loginResponse)
             {
-                responseDto.IsSuccess = true;
+                responseDto.IsSuccess = false;
                 responseDto.Message = "Username or Password is incorrect";
                 return BadRequest(responseDto);
             }
