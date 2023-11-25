@@ -1,6 +1,7 @@
 using Microservices.Web.Service;
 using Microservices.Web.Service.IService;
 using Microservices.Web.Utility;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,13 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient();
 builder.Services.AddHttpClient<ICouponService, CouponService>();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).
+    AddCookie(options =>
+    {
+        options.AccessDeniedPath = "/Auth/AccessDenied";
+        options.LoginPath = "/Auth/Login";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+    });
 
 SD.CouponApiBase = builder.Configuration[key: "ServiceUrls:CouponApi"];
 SD.AuthApiBase = builder.Configuration[key: "ServiceUrls:AuthApi"];
@@ -16,6 +24,7 @@ SD.AuthApiBase = builder.Configuration[key: "ServiceUrls:AuthApi"];
 builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 
 var app = builder.Build();
 
@@ -31,7 +40,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
