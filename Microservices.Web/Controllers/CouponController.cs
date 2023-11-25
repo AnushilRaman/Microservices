@@ -76,6 +76,10 @@ namespace Microservices.Web.Controllers
                 TempData["successMessage"] = "Coupon deleted successfully";
                 return RedirectToAction(nameof(CouponIndex));
             }
+            else
+            {
+                TempData["errorMessage"] = responseDto?.Message;
+            }
             return View(model);
         }
     }

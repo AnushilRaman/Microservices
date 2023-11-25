@@ -10,7 +10,6 @@ namespace Microservices.Services.CouponAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class CouponApiController : ControllerBase
     {
         private readonly AppDbContext _db;
@@ -75,6 +74,7 @@ namespace Microservices.Services.CouponAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseDto> Post([FromBody] CouponDto couponDto)
         {
             try
@@ -95,6 +95,7 @@ namespace Microservices.Services.CouponAPI.Controllers
 
 
         [HttpPut]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseDto> Put([FromBody] CouponDto couponDto)
         {
             try
@@ -115,6 +116,7 @@ namespace Microservices.Services.CouponAPI.Controllers
 
         [HttpDelete]
         [Route("{id:int}")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<ResponseDto> Delete(int id)
         {
             try
