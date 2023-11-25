@@ -23,7 +23,7 @@ namespace Microservices.Services.AuthAPI.Service
         public async Task<bool> AssignRole(string email, string roleName)
         {
             var user = db.ApplicationUsers.FirstOrDefault(x => x.Email.ToLower() == email.ToLower());
-            if (user != null) 
+            if (user != null)
             {
                 if (!roleManager.RoleExistsAsync(roleName).GetAwaiter().GetResult())
                 {
@@ -46,7 +46,8 @@ namespace Microservices.Services.AuthAPI.Service
             }
 
             ////// Genrate the JWT token
-            var token = jwtTokenGenerator.GenerateToken(user);
+            var roles = await userManager.GetRolesAsync(user);
+            var token = jwtTokenGenerator.GenerateToken(user, roles);
 
 
             UserDto userDto = new()

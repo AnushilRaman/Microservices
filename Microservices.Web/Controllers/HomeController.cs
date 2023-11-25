@@ -1,4 +1,6 @@
 ﻿using Microservices.Web.Models;
+using Microservices.Web.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -17,7 +19,7 @@ namespace Microservices.Web.Controllers
         {
             return View();
         }
-
+        [Authorize(Roles = SD.RoleAdmin)]
         public IActionResult Privacy()
         {
             return View();

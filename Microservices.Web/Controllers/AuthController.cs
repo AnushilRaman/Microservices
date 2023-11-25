@@ -80,6 +80,10 @@ namespace Microservices.Web.Controllers
                     return RedirectToAction(nameof(Login));
                 }
             }
+            else
+            {
+                TempData["errorMessage"] = response.Message;
+            }
             var roleList = new List<SelectListItem>()
             {
                 new SelectListItem { Text = SD.RoleAdmin , Value = SD.RoleAdmin },
@@ -106,6 +110,7 @@ namespace Microservices.Web.Controllers
             identity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub, jwt.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub).Value));
             identity.AddClaim(new Claim(JwtRegisteredClaimNames.Name, jwt.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Name).Value));
             identity.AddClaim(new Claim(ClaimTypes.Name, jwt.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Email).Value));
+            identity.AddClaim(new Claim(ClaimTypes.Role, jwt.Claims.FirstOrDefault(x => x.Type == "role").Value));
 
             var principal = new ClaimsPrincipal(identity);
 
