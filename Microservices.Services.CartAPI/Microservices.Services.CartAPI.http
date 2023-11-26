@@ -1,0 +1,6 @@
+@Microservices.Services.CartAPI_HostAddress = http://localhost:5014
+
+GET {{Microservices.Services.CartAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
