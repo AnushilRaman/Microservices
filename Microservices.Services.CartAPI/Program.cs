@@ -2,6 +2,8 @@ using AutoMapper;
 using Microservices.Services.CartAPI;
 using Microservices.Services.CartAPI.Data;
 using Microservices.Services.CartAPI.Extensions;
+using Microservices.Services.CartAPI.Service;
+using Microservices.Services.CartAPI.Service.IService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -14,7 +16,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 IMapper mapper = MapperConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
+builder.Services.AddHttpClient("Product", x => x.BaseAddress
+= new Uri(builder.Configuration["ServiceUrls:ProductApi"]));
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme, securityScheme: new OpenApiSecurityScheme

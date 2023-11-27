@@ -3,6 +3,7 @@ using Azure;
 using Microservices.Services.CartAPI.Data;
 using Microservices.Services.CartAPI.Models;
 using Microservices.Services.CartAPI.Models.Dto;
+using Microservices.Services.CartAPI.Service.IService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,12 +17,14 @@ namespace Microservices.Services.CartAPI.Controllers
     {
         private readonly AppDbContext _db;
         private readonly IMapper _mapper;
+        private readonly IProductService productService;
         private ResponseDto _response;
 
-        public CartApiController(AppDbContext appDbContext, IMapper mapper)
+        public CartApiController(AppDbContext appDbContext, IMapper mapper, IProductService productService)
         {
             this._db = appDbContext;
             this._mapper = mapper;
+            this.productService = productService;
             this._response = new ResponseDto();
         }
 
@@ -36,8 +39,12 @@ namespace Microservices.Services.CartAPI.Controllers
                     CartHeader = _mapper.Map<CartHeaderDto>(_db.CartHeaders.First(x => x.UserId == userId))
                 };
                 cartDto.cartDetails = _mapper.Map<List<CartDetailsDto>>(_db.CartDetails.Where(x => x.CartHeaderId == cartDto.CartHeader.CartHeaderId));
+
+                IEnumerable<ProductDto> productDto = await productService.Getproducts();
+
                 foreach (var item in cartDto.cartDetails)
                 {
+                    item.Product = productDto.FirstOrDefault(x => x.ProductId == item.ProductId);
                     cartDto.CartHeader.CartTotal += (item.Count * item.Product.Price);
                 }
                 _response.Result = cartDto;
