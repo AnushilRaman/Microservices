@@ -18,13 +18,16 @@ namespace Microservices.Services.CartAPI.Controllers
         private readonly AppDbContext _db;
         private readonly IMapper _mapper;
         private readonly IProductService productService;
+        private readonly ICouponService couponService;
         private ResponseDto _response;
 
-        public CartApiController(AppDbContext appDbContext, IMapper mapper, IProductService productService)
+        public CartApiController(AppDbContext appDbContext, IMapper mapper,
+            IProductService productService, ICouponService couponService)
         {
             this._db = appDbContext;
             this._mapper = mapper;
             this.productService = productService;
+            this.couponService = couponService;
             this._response = new ResponseDto();
         }
 
@@ -46,6 +49,16 @@ namespace Microservices.Services.CartAPI.Controllers
                 {
                     item.Product = productDto.FirstOrDefault(x => x.ProductId == item.ProductId);
                     cartDto.CartHeader.CartTotal += (item.Count * item.Product.Price);
+                }
+                if (!string.IsNullOrEmpty(cartDto.CartHeader.CouponCode))
+                {
+                    CouponDto coupon = await couponService.GetCoupons(cartDto.CartHeader.CouponCode);
+                    if (coupon != null && cartDto.CartHeader.CartTotal > coupon.MinAmount)
+                    {
+                        cartDto.CartHeader.CartTotal -= coupon.DiscountAmount;
+                        cartDto.CartHeader.Discount = coupon.DiscountAmount;
+
+                    }
                 }
                 _response.Result = cartDto;
             }

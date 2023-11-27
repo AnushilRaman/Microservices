@@ -18,8 +18,11 @@ builder.Services.AddSingleton(mapper);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddHttpClient("Product", x => x.BaseAddress
 = new Uri(builder.Configuration["ServiceUrls:ProductApi"]));
+builder.Services.AddHttpClient("Coupon", x => x.BaseAddress
+= new Uri(builder.Configuration["ServiceUrls:CouponApi"]));
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme, securityScheme: new OpenApiSecurityScheme
