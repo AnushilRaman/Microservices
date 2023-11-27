@@ -28,14 +28,15 @@ namespace Microservices.Services.CartAPI.Controllers
         {
             try
             {
-                var cartHeaderFromDb = await _db.CartHeaders.FirstOrDefaultAsync(x => x.UserId == cartDto.CartHeader.UserId);
+                var cartHeaderFromDb = await _db.CartHeaders.AsNoTracking().FirstOrDefaultAsync(x => x.UserId == cartDto.CartHeader.UserId);
                 if (cartHeaderFromDb == null)
                 {
+                    
                     //Create header and Details
-                    CartHeaders cartHeaders = _mapper.Map<CartHeaders>(cartDto);
+                    CartHeaders cartHeaders = _mapper.Map<CartHeaders>(cartDto.CartHeader);
                     _db.CartHeaders.Add(cartHeaders);
                     await _db.SaveChangesAsync();
-                    cartDto.cartDetails.First().CartHeaderId = cartDto.CartHeader.CartHeaderId;
+                    cartDto.cartDetails.First().CartHeaderId = cartHeaders.CartHeaderId;
                     _db.CartDetails.Add(_mapper.Map<CartDetails>(cartDto.cartDetails.First()));
                     await _db.SaveChangesAsync();
 
@@ -43,21 +44,33 @@ namespace Microservices.Services.CartAPI.Controllers
                 else
                 {
                     //if header is not null 
-                    //check if details has same product
-                    var cartDetailsFromDb = await _db.CartDetails.FirstOrDefaultAsync(
+                    //check if details has same product.
+
+                    var cartDetailsFromDb = await _db.CartDetails.AsNoTracking().FirstOrDefaultAsync(
                         x => x.ProductId == cartDto.cartDetails.FirstOrDefault().ProductId &&
-                        x.CartDetailsId == cartDto.cartDetails.FirstOrDefault().CartDetailsId
-                        );
+                        x.CartHeaderId == cartHeaderFromDb.CartHeaderId);
                     if (cartDetailsFromDb == null)
                     {
+
                         //create cart details
+                        cartDto.cartDetails.First().CartHeaderId = cartHeaderFromDb.CartHeaderId;
+                        _db.CartDetails.Add(_mapper.Map<CartDetails>(cartDto.cartDetails.First()));
+                        await _db.SaveChangesAsync();
+
                     }
                     else
                     {
+
                         //Update Count in cart details
+                        cartDto.cartDetails.First().Count += cartDetailsFromDb.Count;
+                        cartDto.cartDetails.First().CartDetailsId = cartDetailsFromDb.CartDetailsId;
+                        cartDto.cartDetails.First().CartHeaderId = cartDetailsFromDb.CartHeaderId;
+                        _db.CartDetails.Update(_mapper.Map<CartDetails>(cartDto.cartDetails.First()));
+                        await _db.SaveChangesAsync();
 
                     }
                 }
+                _response.Result = cartDto;
             }
             catch (Exception ex)
             {
