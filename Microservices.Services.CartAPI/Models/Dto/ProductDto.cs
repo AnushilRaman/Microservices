@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Microservices.Services.CartAPI.Models.Dto
+﻿namespace Microservices.Services.CartAPI.Models.Dto
 {
     public class ProductDto
     {

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microservices.Services.CartAPI.Models;
 using Microservices.Services.CartAPI.Models.Dto;
+using System.Reflection.PortableExecutable;
 
 
 namespace Microservices.Services.CartAPI
@@ -11,8 +12,8 @@ namespace Microservices.Services.CartAPI
         {
             var mappingConfig = new MapperConfiguration(config =>
             {
-                config.CreateMap<CartDetailsDto, CartDetails>().ReverseMap();
-                config.CreateMap<CartHeaderDto, CartHeaders>().ReverseMap();
+                config.CreateMap<CartHeaders, CartHeaderDto>().ReverseMap();
+                config.CreateMap<CartDetails, CartDetailsDto>().ReverseMap();
             });
             return mappingConfig;
         }
