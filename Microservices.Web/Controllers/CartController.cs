@@ -18,7 +18,7 @@ namespace Microservices.Web.Controllers
         [Authorize]
         public async Task<IActionResult> CartIndex()
         {
-            return View(LoadCartDtoBasedLoggedInUser());
+            return View(await LoadCartDtoBasedLoggedInUser());
         }
 
         private async Task<CartDto> LoadCartDtoBasedLoggedInUser()
