@@ -21,7 +21,7 @@ namespace Microservices.Web.Service
             {
                 apiType = SD.ApiType.POST,
                 Data = cartDto,
-                Url = SD.CartApiBase + "/" + SD.ApiName.api + "/" + SD.ApiName.CartApi + "/" + "ApplyCoupon"
+                Url = SD.CartApiBase + "/" + SD.ApiName.api + "/" + SD.ApiName.CartApi + "/ApplyCoupon"
             });
         }
 
@@ -30,7 +30,7 @@ namespace Microservices.Web.Service
             return await baseService.SendAsync(new RequestDto()
             {
                 apiType = SD.ApiType.GET,
-                Url = SD.CartApiBase + "/" + SD.ApiName.api + "/" + SD.ApiName.CartApi + "/" + userId
+                Url = SD.CartApiBase + "/" + SD.ApiName.api + "/" + SD.ApiName.CartApi + "/GetCart/" + userId
             });
         }
 
@@ -40,7 +40,7 @@ namespace Microservices.Web.Service
             {
                 apiType = SD.ApiType.POST,
                 Data = cartDetailsid,
-                Url = SD.CartApiBase + "/" + SD.ApiName.api + "/" + SD.ApiName.CartApi + "/" + "RemoveCoupon"
+                Url = SD.CartApiBase + "/" + SD.ApiName.api + "/" + SD.ApiName.CartApi + "/RemoveCoupon"
             });
         }
 
@@ -50,7 +50,7 @@ namespace Microservices.Web.Service
             {
                 apiType = SD.ApiType.POST,
                 Data = cartDto,
-                Url = SD.CartApiBase + "/" + SD.ApiName.api + "/" + SD.ApiName.CartApi + "/" + "CartUpsert"
+                Url = SD.CartApiBase + "/" + SD.ApiName.api + "/" + SD.ApiName.CartApi + "/CartUpsert"
             });
         }
     }
