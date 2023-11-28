@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient();
+builder.Services.AddHttpClient<ICartService, CartService>();
 builder.Services.AddHttpClient<ICouponService, CouponService>();
 builder.Services.AddHttpClient<IProductService, ProductService>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).
@@ -22,8 +23,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 SD.CouponApiBase = builder.Configuration[key: "ServiceUrls:CouponApi"];
 SD.AuthApiBase = builder.Configuration[key: "ServiceUrls:AuthApi"];
 SD.ProductApiBase = builder.Configuration[key: "ServiceUrls:ProductApi"];
+SD.CartApiBase = builder.Configuration[key: "ServiceUrls:CartApi"];
 
 builder.Services.AddScoped<IBaseService, BaseService>();
+builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
