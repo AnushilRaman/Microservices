@@ -1,13 +1,10 @@
 ﻿using AutoMapper;
-using Azure;
 using Microservices.Services.CartAPI.Data;
 using Microservices.Services.CartAPI.Models;
 using Microservices.Services.CartAPI.Models.Dto;
 using Microservices.Services.CartAPI.Service.IService;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.PortableExecutable;
 
 namespace Microservices.Services.CartAPI.Controllers
 {
