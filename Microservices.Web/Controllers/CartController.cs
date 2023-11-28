@@ -3,7 +3,6 @@ using Microservices.Web.Service.IService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Security.Claims;
 
 namespace Microservices.Web.Controllers
 {

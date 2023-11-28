@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
-using Azure;
 using Microservices.Services.ProductAPI.Data;
 using Microservices.Services.ProductAPI.Models;
 using Microservices.Services.ProductAPI.Models.Dto;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

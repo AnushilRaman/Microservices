@@ -1,8 +1,6 @@
 ﻿using Microservices.Web.Models;
 using Microservices.Web.Service.IService;
 using Microservices.Web.Utility;
-using System;
-using System.Reflection.Metadata;
 
 namespace Microservices.Web.Service
 {
