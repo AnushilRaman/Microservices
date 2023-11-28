@@ -21,6 +21,42 @@ namespace Microservices.Web.Controllers
             return View(await LoadCartDtoBasedLoggedInUser());
         }
 
+        public async Task<IActionResult> Remove(int cartDetailsId)
+        {
+            var userId = User.Claims.Where(x => x.Type == System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Sub).FirstOrDefault()?.Value;
+            var response = await cartService.RemoveFromCartAsync(cartDetailsId);
+            if (response != null && response.IsSuccess)
+            {
+                TempData["successMessage"] = "Cart Updated Successfully.";
+                return RedirectToAction(nameof(CartIndex));
+            }
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ApplyCoupon(CartDto cartDto)
+        {
+            var response = await cartService.ApplyCouponAsync(cartDto);
+            if (response != null && response.IsSuccess)
+            {
+                TempData["successMessage"] = "Cart Updated Successfully.";
+                return RedirectToAction(nameof(CartIndex));
+            }
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveCoupon(CartDto cartDto)
+        {
+            cartDto.CartHeader.CouponCode = string.Empty;
+            var response = await cartService.ApplyCouponAsync(cartDto);
+            if (response != null && response.IsSuccess)
+            {
+                TempData["successMessage"] = "Cart Updated Successfully.";
+                return RedirectToAction(nameof(CartIndex));
+            }
+            return View();
+        }
         private async Task<CartDto> LoadCartDtoBasedLoggedInUser()
         {
             var userId = User.Claims.Where(x => x.Type == System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Sub).FirstOrDefault()?.Value;
