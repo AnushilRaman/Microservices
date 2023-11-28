@@ -6,16 +6,20 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Microservices.Web.Controllers
 {
     public class HomeController : Controller
     {
         private readonly IProductService productService;
+        private readonly ICartService cartService;
 
-        public HomeController(IProductService productService)
+        public HomeController(IProductService productService, ICartService cartService)
         {
             this.productService = productService;
+            this.cartService = cartService;
         }
 
         public async Task<IActionResult> Index()
@@ -47,6 +51,42 @@ namespace Microservices.Web.Controllers
                 TempData["errorMessage"] = response?.Message;
             }
             return View(product);
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ActionName("ProductDetails")]
+        public async Task<IActionResult> ProductDetails(ProductDto productDto)
+        {
+            CartDto cart = new CartDto()
+            {
+                CartHeader = new CartHeaderDto()
+                {
+                    UserId = User.Claims.Where(x => x.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value,
+                }
+            };
+            CartDetailsDto cartDetailsDto = new CartDetailsDto()
+            {
+                Count = productDto.Count,
+                ProductId = productDto.ProductId,
+            };
+            List<CartDetailsDto> cartDetails = new()
+            {
+                cartDetailsDto
+            };
+            cart.cartDetails = cartDetails;
+
+            ResponseDto response = await cartService.UpsertCartAsync(cart);
+            if (response != null && response.IsSuccess)
+            {
+                TempData["successMessage"] = "Item has been added to the Shopping Cart.";
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                TempData["errorMessage"] = response?.Message;
+            }
+            return View(productDto);
         }
 
         [Authorize(Roles = SD.RoleAdmin)]
