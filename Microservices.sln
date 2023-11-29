@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microservices.Services.Cart
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microservices.MessageBus", "Microservices.MessageBus\Microservices.MessageBus.csproj", "{7A9AE834-D0B6-41B3-BCBE-C334F78CCC30}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microservices.Services.EmailAPI", "Microservices.Services.EmailAPI\Microservices.Services.EmailAPI.csproj", "{2AA3D71B-1D8A-4342-A261-0C9145500A40}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{7A9AE834-D0B6-41B3-BCBE-C334F78CCC30}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A9AE834-D0B6-41B3-BCBE-C334F78CCC30}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A9AE834-D0B6-41B3-BCBE-C334F78CCC30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AA3D71B-1D8A-4342-A261-0C9145500A40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AA3D71B-1D8A-4342-A261-0C9145500A40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AA3D71B-1D8A-4342-A261-0C9145500A40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AA3D71B-1D8A-4342-A261-0C9145500A40}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,6 +70,7 @@ Global
 		{3DA16168-B05E-444B-A996-2286A0E3C2DE} = {DFF082A2-F451-4A81-BC04-FD4E3391264B}
 		{2BE782AF-D5F4-4196-8ECE-7BEFA252EF2F} = {DFF082A2-F451-4A81-BC04-FD4E3391264B}
 		{7A9AE834-D0B6-41B3-BCBE-C334F78CCC30} = {491CEC2F-2C41-4FA2-BF90-A898F61FD4D3}
+		{2AA3D71B-1D8A-4342-A261-0C9145500A40} = {DFF082A2-F451-4A81-BC04-FD4E3391264B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7DCA2972-FF92-41DF-B578-356AFDDFDA70}
