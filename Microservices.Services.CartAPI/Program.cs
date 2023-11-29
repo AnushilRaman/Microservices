@@ -52,7 +52,7 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 StaticClass.MessageBusConnectionString = builder.Configuration["MessageServices:MessageBusConnectionString"];
-StaticClass.EmailShoppingCart = builder.Configuration["TopicAndQueueNames:EmailShoppingCart"];
+StaticClass.EmailShoppingCart = builder.Configuration["TopicAndQueueNames:EmailShoppingCartQueue"];
 
 builder.AddAppAuthentication();
 // Add services to the container.

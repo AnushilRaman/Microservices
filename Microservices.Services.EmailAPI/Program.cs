@@ -1,4 +1,7 @@
 using Microservices.Services.EmailAPI.Data;
+using Microservices.Services.EmailAPI.Extension;
+using Microservices.Services.EmailAPI.Messaging;
+using Microservices.Services.EmailAPI.Utility;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +11,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 // Add services to the container.
+
+SD._serviceBusConnectionString = builder.Configuration["MessageServices:MessageBusConnectionString"];
+SD._emailCartQueue = builder.Configuration["TopicAndQueueNames:EmailShoppingCartQueue"];
+
+builder.Services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -30,6 +38,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseAzureServiceBusExtension();
 
 app.Run();
 
