@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microservices.MessageBus;
 using Microservices.Services.CartAPI.Data;
 using Microservices.Services.CartAPI.Models;
 using Microservices.Services.CartAPI.Models.Dto;
@@ -16,15 +17,17 @@ namespace Microservices.Services.CartAPI.Controllers
         private readonly IMapper _mapper;
         private readonly IProductService productService;
         private readonly ICouponService couponService;
+        private readonly IMessageBus messageBus;
         private ResponseDto _response;
 
         public CartApiController(AppDbContext appDbContext, IMapper mapper,
-            IProductService productService, ICouponService couponService)
+            IProductService productService, ICouponService couponService, IMessageBus messageBus)
         {
             this._db = appDbContext;
             this._mapper = mapper;
             this.productService = productService;
             this.couponService = couponService;
+            this.messageBus = messageBus;
             this._response = new ResponseDto();
         }
 
@@ -87,8 +90,25 @@ namespace Microservices.Services.CartAPI.Controllers
                 _response.Message = ex.Message;
             }
             return _response;
-
         }
+
+
+        [HttpPost("EmailCartRequest")]
+        public async Task<ResponseDto> EmailCartRequest([FromBody] CartDto cartDto)
+        {
+            try
+            {
+                await messageBus.PublishMessage(cartDto, StaticClass.EmailShoppingCart);
+                _response.Result = true;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
+
 
         [HttpPost("RemoveCoupon")]
         public async Task<ResponseDto> RemoveCoupon([FromBody] CartDto cartDto)

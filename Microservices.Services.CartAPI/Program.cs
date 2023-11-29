@@ -21,6 +21,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICouponService, CouponService>();
+builder.Services.AddScoped<IMessageBus, MessageBus>();
 builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
 builder.Services.AddHttpClient("Product", x => x.BaseAddress
 = new Uri(builder.Configuration["ServiceUrls:ProductApi"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
@@ -51,6 +52,7 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 StaticClass.MessageBusConnectionString = builder.Configuration["MessageServices:MessageBusConnectionString"];
+StaticClass.EmailShoppingCart = builder.Configuration["TopicAndQueueNames:EmailShoppingCart"];
 
 builder.AddAppAuthentication();
 // Add services to the container.

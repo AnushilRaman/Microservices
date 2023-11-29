@@ -2,7 +2,7 @@
 
 @if (Model.CartHeader != null && Model.cartDetails?.Count() > 0)
 {
-    <form method="post">
+    <form method="post" asp-action="EmailCart">
         <br />
         <input hidden asp-for="CartHeader.UserId" />
         <input hidden asp-for="CartHeader.CartHeaderId" />
@@ -98,6 +98,6 @@
 else
 {
     <div class="align-content-center">
-    <p>Please add items to the Cart....</p>
+        <p>Please add items to the Cart....</p>
     </div>
 }

@@ -23,6 +23,16 @@ namespace Microservices.Web.Service
             });
         }
 
+        public async Task<ResponseDto?> EmailCartAsync(CartDto cartDto)
+        {
+            return await baseService.SendAsync(new RequestDto()
+            {
+                apiType = SD.ApiType.POST,
+                Data = cartDto,
+                Url = SD.CartApiBase + "/" + SD.ApiName.api + "/" + SD.ApiName.CartApi + "/EmailCartRequest"
+            });
+        }
+
         public async Task<ResponseDto?> GetCartByUserIdAsync(string userId)
         {
             return await baseService.SendAsync(new RequestDto()
