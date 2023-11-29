@@ -1,6 +1,7 @@
 using Microservices.Services.EmailAPI.Data;
 using Microservices.Services.EmailAPI.Extension;
 using Microservices.Services.EmailAPI.Messaging;
+using Microservices.Services.EmailAPI.Service;
 using Microservices.Services.EmailAPI.Utility;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+var optionBuilder = new DbContextOptionsBuilder<AppDbContext>();
+optionBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+builder.Services.AddSingleton(new EmailService(optionBuilder.Options));
+
+
 // Add services to the container.
 
 SD._serviceBusConnectionString = builder.Configuration["MessageServices:MessageBusConnectionString"];

@@ -1,5 +1,6 @@
 ﻿using Azure.Messaging.ServiceBus;
 using Microservices.Services.EmailAPI.Models.Dto;
+using Microservices.Services.EmailAPI.Service;
 using Microservices.Services.EmailAPI.Utility;
 using Newtonsoft.Json;
 using System.Text;
@@ -8,11 +9,13 @@ namespace Microservices.Services.EmailAPI.Messaging
 {
     public class AzureServiceBusConsumer : IAzureServiceBusConsumer
     {
+        private readonly EmailService emailService;
         private ServiceBusProcessor _emailCartProcessor;
-        public AzureServiceBusConsumer()
+        public AzureServiceBusConsumer(EmailService emailService)
         {
             var client = new ServiceBusClient(SD._serviceBusConnectionString);
             _emailCartProcessor = client.CreateProcessor(SD._emailCartQueue);
+            this.emailService = emailService;
         }
 
         public async Task Start()
@@ -39,6 +42,7 @@ namespace Microservices.Services.EmailAPI.Messaging
             CartDto cartDto = JsonConvert.DeserializeObject<CartDto>(body);
             try
             {
+                await this.emailService.EmailCartAndLog(cartDto);
                 await args.CompleteMessageAsync(args.Message);
             }
             catch (Exception ex)
