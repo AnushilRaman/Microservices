@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microservices.MessageBus;
 using Microservices.Services.CartAPI;
 using Microservices.Services.CartAPI.Data;
 using Microservices.Services.CartAPI.Extensions;
@@ -49,6 +50,8 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
+StaticClass.MessageBusConnectionString = builder.Configuration["MessageServices:MessageBusConnectionString"];
+
 builder.AddAppAuthentication();
 // Add services to the container.
 
