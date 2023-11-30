@@ -4,5 +4,6 @@
     {
         public static string _serviceBusConnectionString;
         public static string _emailCartQueue;
+        public static string _emailregisterUserQueue;
     }
 }

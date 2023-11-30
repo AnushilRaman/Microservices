@@ -24,4 +24,9 @@
   </ItemGroup>
 
 
+  <ItemGroup>
+    <ProjectReference Include="..\Microservices.MessageBus\Microservices.MessageBus.csproj" />
+  </ItemGroup>
+
+
 </Project>

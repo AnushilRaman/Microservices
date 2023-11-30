@@ -35,6 +35,12 @@ namespace Microservices.Services.EmailAPI.Service
             await LogAndEmail(message.ToString(), cartDto.CartHeader.Email);
         }
 
+        public async Task EmailNewUserAndLog(string email)
+        {
+            string message = "User registeration successful. <b/> : " + email;
+            await LogAndEmail(message, email);
+        }
+
         private async Task<bool> LogAndEmail(string message, string email)
         {
             try

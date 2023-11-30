@@ -5,5 +5,6 @@ namespace Microservices.Services.EmailAPI.Service.IService
     public interface IEmailService
     {
         Task EmailCartAndLog(CartDto cartDto);
+        Task EmailNewUserAndLog(string email);
     }
 }

@@ -1,3 +1,4 @@
+using Microservices.MessageBus;
 using Microservices.Services.AuthAPI;
 using Microservices.Services.AuthAPI.Data;
 using Microservices.Services.AuthAPI.Models;
@@ -20,10 +21,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("ApiSettings:JwtOptions"));
+StaticClass.MessageBusConnectionString = builder.Configuration["MessageServices:MessageBusConnectionString"];
+StaticClass.EmailregisterUserCart = builder.Configuration["TopicAndQueueNames:EmailregisterUserQueue"];
+
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+builder.Services.AddScoped<IMessageBus, MessageBus>();
 
 var app = builder.Build();
 

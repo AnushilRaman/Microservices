@@ -1,6 +1,6 @@
-﻿using Microservices.Services.AuthAPI.Models.Dto;
+﻿using Microservices.MessageBus;
+using Microservices.Services.AuthAPI.Models.Dto;
 using Microservices.Services.AuthAPI.Service.IService;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Microservices.Services.AuthAPI.Controllers
@@ -10,17 +10,20 @@ namespace Microservices.Services.AuthAPI.Controllers
     public class AuthAPIController : ControllerBase
     {
         private readonly IAuthService authService;
+        private readonly IMessageBus messageBus;
         protected ResponseDto responseDto;
 
-        public AuthAPIController(IAuthService authService)
+        public AuthAPIController(IAuthService authService, IMessageBus messageBus)
         {
             this.authService = authService;
+            this.messageBus = messageBus;
             responseDto = new();
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegistrationRequestDto model)
         {
+
             var errorMessage = await authService.Register(model);
             if (!string.IsNullOrEmpty(errorMessage))
             {
@@ -28,6 +31,7 @@ namespace Microservices.Services.AuthAPI.Controllers
                 responseDto.Message = errorMessage;
                 return BadRequest(responseDto);
             }
+            await messageBus.PublishMessage(model.Email, StaticClass.EmailregisterUserCart);
             return Ok(responseDto);
         }
 
