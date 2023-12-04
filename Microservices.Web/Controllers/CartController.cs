@@ -21,6 +21,12 @@ namespace Microservices.Web.Controllers
             return View(await LoadCartDtoBasedLoggedInUser());
         }
 
+        [Authorize]
+        public async Task<IActionResult> Checkout()
+        {
+            return View();
+        }
+
         public async Task<IActionResult> Remove(int cartDetailsId)
         {
             var userId = User.Claims.Where(x => x.Type == System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Sub).FirstOrDefault()?.Value;
