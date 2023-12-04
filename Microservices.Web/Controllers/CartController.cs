@@ -24,7 +24,7 @@ namespace Microservices.Web.Controllers
         [Authorize]
         public async Task<IActionResult> Checkout()
         {
-            return View();
+            return View(await LoadCartDtoBasedLoggedInUser());
         }
 
         public async Task<IActionResult> Remove(int cartDetailsId)
