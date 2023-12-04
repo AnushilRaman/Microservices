@@ -1,4 +1,4 @@
-﻿using Microservices.Services.OrderAPI.Dto;
+﻿using Microservices.Services.OrderAPI.Models.Dto;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

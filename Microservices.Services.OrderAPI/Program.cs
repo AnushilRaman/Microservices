@@ -1,5 +1,59 @@
-var builder = WebApplication.CreateBuilder(args);
+using AutoMapper;
+using Microservices.MessageBus;
+using Microservices.Services.OrderAPI;
+using Microservices.Services.OrderAPI.Data;
+using Microservices.Services.OrderAPI.Extensions;
+using Microservices.Services.OrderAPI.Service;
+using Microservices.Services.OrderAPI.Service.IService;
+using Microservices.Services.OrderAPI.Utility;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+IMapper mapper = MapperConfig.RegisterMaps().CreateMapper();
+builder.Services.AddSingleton(mapper);
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IMessageBus, MessageBus>();
+builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
+builder.Services.AddHttpClient("Product", x => x.BaseAddress
+= new Uri(builder.Configuration["ServiceUrls:ProductApi"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
+
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme, securityScheme: new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Description = "Bearer Created JWT Token",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference=new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id= JwtBearerDefaults.AuthenticationScheme
+                }
+            },new string[]{}
+        }
+    });
+});
+StaticClass.MessageBusConnectionString = builder.Configuration["MessageServices:MessageBusConnectionString"];
+StaticClass.EmailShoppingCart = builder.Configuration["TopicAndQueueNames:EmailShoppingCartQueue"];
+
+builder.AddAppAuthentication();
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -22,4 +76,21 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+
+AddMigration();
+
 app.Run();
+
+
+
+void AddMigration()
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var _db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        if (_db.Database.GetPendingMigrations().Count() > 0)
+        {
+            _db.Database.Migrate();
+        }
+    }
+}

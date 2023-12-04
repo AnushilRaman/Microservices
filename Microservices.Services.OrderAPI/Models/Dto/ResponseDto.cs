@@ -1,4 +1,4 @@
-﻿namespace Microservices.Services.OrderAPI.Dto
+﻿namespace Microservices.Services.OrderAPI.Models.Dto
 {
     public class ResponseDto
     {
