@@ -5,6 +5,7 @@
         public static string? MessageBusConnectionString { get; set; }
         public static string? EmailShoppingCart { get; set; }
         public static string? EmailregisterUserCart { get; set; }
+        public static string? TopicName { get; set; }
 
 
         public const string Status_Pending = "Pending";

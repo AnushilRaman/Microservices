@@ -20,11 +20,14 @@ namespace Microservices.Services.OrderAPI.Controllers
         private IMapper _mapper;
         private readonly AppDbContext _appDbContext;
         private IProductService _productService;
-        public OrderApiController(IMapper _mapper, AppDbContext _appDbContext, IProductService _productService)
+        private readonly IMessageBus messageBus;
+
+        public OrderApiController(IMapper _mapper, AppDbContext _appDbContext, IProductService _productService, IMessageBus messageBus)
         {
             this._mapper = _mapper;
             this._appDbContext = _appDbContext;
             this._productService = _productService;
+            this.messageBus = messageBus;
             this._responseDto = new ResponseDto();
         }
 
@@ -133,6 +136,13 @@ namespace Microservices.Services.OrderAPI.Controllers
                     orderHeader.PaymentIntentId = paymentIntent.Id;
                     orderHeader.Status = StaticClass.Status_Approved;
                     await _appDbContext.SaveChangesAsync();
+                    RewardsDto rewardsDto = new()
+                    {
+                        OrderId = orderHeader.OrderHeaderId,
+                        RewardsActivity = Convert.ToInt32(orderHeader.CartTotal),
+                        UserId = orderHeader.UserId
+                    };
+                    await messageBus.PublishMessage(rewardsDto, StaticClass.TopicName);
                     _responseDto.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
                 }
             }

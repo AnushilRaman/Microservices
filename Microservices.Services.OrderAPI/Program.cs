@@ -25,6 +25,8 @@ builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
 builder.Services.AddHttpClient("Product", x => x.BaseAddress
 = new Uri(builder.Configuration["ServiceUrls:ProductApi"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
 
+StaticClass.TopicName = builder.Configuration.GetSection("TopicAndQueueNames:OrderCreatedTopic").Value;
+StaticClass.MessageBusConnectionString = builder.Configuration["MessageServices:MessageBusConnectionString"];
 
 builder.Services.AddSwaggerGen(options =>
 {
