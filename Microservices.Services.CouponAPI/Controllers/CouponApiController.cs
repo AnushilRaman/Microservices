@@ -84,6 +84,16 @@ namespace Microservices.Services.CouponAPI.Controllers
                 await _db.Coupons.AddAsync(obj);
                 await _db.SaveChangesAsync();
 
+                var options = new Stripe.CouponCreateOptions
+                {
+                    AmountOff = (long)couponDto.DiscountAmount * 100,
+                    Name = couponDto.CouponCode,
+                    Currency = "inr",
+                    Id = couponDto.CouponCode,
+                };
+                var service = new Stripe.CouponService();
+                service.Create(options);
+
                 _response.Result = _mapper.Map<CouponDto>(obj);
             }
             catch (Exception ex)
@@ -125,6 +135,9 @@ namespace Microservices.Services.CouponAPI.Controllers
                 Coupon obj = _db.Coupons.First(u => u.CouponId == id);
                 _db.Coupons.Remove(obj);
                 await _db.SaveChangesAsync();
+
+                var service = new Stripe.CouponService();
+                service.Delete(obj.CouponCode);
             }
             catch (Exception ex)
             {

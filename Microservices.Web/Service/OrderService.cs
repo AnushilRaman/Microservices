@@ -32,5 +32,15 @@ namespace Microservices.Web.Service
                 Url = SD.OrderApiBase + "/" + SD.ApiName.api + "/" + SD.ApiName.OrderApi + "/CreateStripeSession"
             });
         }
+
+        public async Task<ResponseDto?> ValidateStripeSession(int orderHeaderId)
+        {
+            return await baseService.SendAsync(new RequestDto()
+            {
+                apiType = SD.ApiType.POST,
+                Data = orderHeaderId,
+                Url = SD.OrderApiBase + "/" + SD.ApiName.api + "/" + SD.ApiName.OrderApi + "/ValidateStripeSession"
+            });
+        }
     }
 }

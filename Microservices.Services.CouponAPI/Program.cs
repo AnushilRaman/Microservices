@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Stripe;
 using System;
 using System.Text;
 
@@ -52,6 +53,7 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 builder.AddAppAuthentication();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -60,6 +62,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Value;
 
 app.UseHttpsRedirection();
 

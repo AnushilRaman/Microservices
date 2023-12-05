@@ -1,5 +1,6 @@
 ﻿using Microservices.Web.Models;
 using Microservices.Web.Service.IService;
+using Microservices.Web.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -67,6 +68,16 @@ namespace Microservices.Web.Controllers
 
         public async Task<IActionResult> Confirmation(int orderId)
         {
+            var response = await _orderService.ValidateStripeSession(orderId);
+
+            if (response != null && response.IsSuccess)
+            {
+                OrderHeaderDto orderHeaderDto = JsonConvert.DeserializeObject<OrderHeaderDto>(Convert.ToString(response.Result));
+                if (orderHeaderDto != null && orderHeaderDto.Status == SD.Status_Approved)
+                {
+                    return View(orderId);
+                }
+            }
             return View(orderId);
         }
 

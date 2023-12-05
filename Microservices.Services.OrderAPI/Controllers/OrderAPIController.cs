@@ -67,6 +67,13 @@ namespace Microservices.Services.OrderAPI.Controllers
                     LineItems = new List<SessionLineItemOptions>(),
                     Mode = "payment",
                 };
+                var discountAmt = new List<SessionDiscountOptions>()
+                {
+                    new SessionDiscountOptions()
+                    {
+                        Coupon = stripeRequestDto.OrderHeader.CouponCode
+                    }
+                };
 
                 foreach (var item in stripeRequestDto.OrderHeader.OrderDetails)
                 {
@@ -85,7 +92,10 @@ namespace Microservices.Services.OrderAPI.Controllers
                     };
                     options.LineItems.Add(sessionItem);
                 }
-
+                if (stripeRequestDto.OrderHeader.Discount > 0)
+                {
+                    options.Discounts = discountAmt;
+                }
                 var service = new SessionService();
                 Session session = service.Create(options);
                 stripeRequestDto.StripeSessionUrl = session.Url;
@@ -95,6 +105,36 @@ namespace Microservices.Services.OrderAPI.Controllers
                 await _appDbContext.SaveChangesAsync();
                 _responseDto.Result = stripeRequestDto;
 
+            }
+            catch (Exception ex)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = ex.Message;
+            }
+            return _responseDto;
+        }
+
+        [Authorize]
+        [HttpPost("ValidateStripeSession")]
+        public async Task<ResponseDto> ValidateStripeSession([FromBody] int orderHeaderId)
+        {
+            try
+            {
+                OrderHeader orderHeader = _appDbContext.OrderHeaders.First(x => x.OrderHeaderId == orderHeaderId);
+
+                var service = new SessionService();
+                Session session = service.Get(orderHeader.StripeSessionId);
+                var paymentIntentService = new PaymentIntentService();
+                PaymentIntent paymentIntent = paymentIntentService.Get(session.PaymentIntentId);
+
+                if (paymentIntent.Status == "succeeded")
+                {
+                    //payment successfull
+                    orderHeader.PaymentIntentId = paymentIntent.Id;
+                    orderHeader.Status = StaticClass.Status_Approved;
+                    await _appDbContext.SaveChangesAsync();
+                    _responseDto.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
+                }
             }
             catch (Exception ex)
             {
