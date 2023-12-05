@@ -62,19 +62,39 @@ namespace Microservices.Services.OrderAPI.Controllers
 
                 var options = new SessionCreateOptions
                 {
-                    SuccessUrl = "https://example.com/success",
-                    LineItems = new List<SessionLineItemOptions>
-                      {
-                        new SessionLineItemOptions
-                        {
-                          Price = "price_H5ggYwtDq4fbrJ",
-                          Quantity = 2,
-                        },
-                      },
+                    SuccessUrl = stripeRequestDto.ApprovedUrl,
+                    CancelUrl = stripeRequestDto.CancelUrl,
+                    LineItems = new List<SessionLineItemOptions>(),
                     Mode = "payment",
                 };
+
+                foreach (var item in stripeRequestDto.OrderHeader.OrderDetails)
+                {
+                    var sessionItem = new SessionLineItemOptions
+                    {
+                        PriceData = new SessionLineItemPriceDataOptions
+                        {
+                            UnitAmount = (long)(item.Price * 100),
+                            Currency = "inr",
+                            ProductData = new SessionLineItemPriceDataProductDataOptions
+                            {
+                                Name = item.Product.Name,
+                            }
+                        },
+                        Quantity = item.Count
+                    };
+                    options.LineItems.Add(sessionItem);
+                }
+
                 var service = new SessionService();
-                service.Create(options);
+                Session session = service.Create(options);
+                stripeRequestDto.StripeSessionUrl = session.Url;
+
+                OrderHeader orderHeader = _appDbContext.OrderHeaders.First(x => x.OrderHeaderId == stripeRequestDto.OrderHeader.OrderHeaderId);
+                orderHeader.StripeSessionId = session.Id;
+                await _appDbContext.SaveChangesAsync();
+                _responseDto.Result = stripeRequestDto;
+
             }
             catch (Exception ex)
             {

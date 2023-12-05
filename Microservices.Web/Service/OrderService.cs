@@ -22,5 +22,15 @@ namespace Microservices.Web.Service
                 Url = SD.OrderApiBase + "/" + SD.ApiName.api + "/" + SD.ApiName.OrderApi + "/CreateOrder"
             });
         }
+
+        public async Task<ResponseDto?> CreateStripeSession(StripeRequestDto stripeRequestDto)
+        {
+            return await baseService.SendAsync(new RequestDto()
+            {
+                apiType = SD.ApiType.POST,
+                Data = stripeRequestDto,
+                Url = SD.OrderApiBase + "/" + SD.ApiName.api + "/" + SD.ApiName.OrderApi + "/CreateStripeSession"
+            });
+        }
     }
 }

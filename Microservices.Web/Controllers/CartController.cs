@@ -47,6 +47,19 @@ namespace Microservices.Web.Controllers
             if (response != null && response.IsSuccess)
             {
                 //get stripe session and redirect to stripe to place order
+                var domain = Request.Scheme + "://" + Request.Host.Value + "/";
+                StripeRequestDto stripeRequestDto = new()
+                {
+                    ApprovedUrl = domain + "Cart/Confirmation?orderId=" + orderHeaderDto.OrderHeaderId,
+                    CancelUrl = domain + "Cart/Checkout",
+                    OrderHeader = orderHeaderDto
+                };
+                var stripResponse = await _orderService.CreateStripeSession(stripeRequestDto);
+
+                StripeRequestDto respDto = JsonConvert.DeserializeObject<StripeRequestDto>(Convert.ToString(stripResponse.Result));
+
+                Response.Headers.Add("Location", respDto.StripeSessionUrl);
+                return new StatusCodeResult(303);
 
             }
             return View();
