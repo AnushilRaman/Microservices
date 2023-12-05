@@ -28,6 +28,8 @@ namespace Microservices.Web.Controllers
         {
             return View(await LoadCartDtoBasedLoggedInUser());
         }
+
+
         [Authorize]
         [HttpPost]
         [ActionName("Checkout")]
@@ -48,6 +50,11 @@ namespace Microservices.Web.Controllers
 
             }
             return View();
+        }
+
+        public async Task<IActionResult> Confirmation(int orderId)
+        {
+            return View(orderId);
         }
 
         public async Task<IActionResult> Remove(int cartDetailsId)
