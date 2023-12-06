@@ -41,11 +41,11 @@ namespace Microservices.Services.OrderAPI.Controllers
                 IEnumerable<OrderHeader> objList;
                 if (User.IsInRole(StaticClass.RoleAdmin))
                 {
-                    objList = _appDbContext.OrderHeaders.Include(x => x.orderDetails).OrderByDescending(x => x.OrderHeaderId).ToList();
+                    objList = _appDbContext.OrderHeaders.Include(x => x.orderDetails).Where(x => x.Email != null).OrderByDescending(x => x.OrderHeaderId).ToList();
                 }
                 else
                 {
-                    objList = _appDbContext.OrderHeaders.Include(x => x.orderDetails).Where(x => x.UserId == userid).OrderByDescending(x => x.OrderHeaderId).ToList();
+                    objList = _appDbContext.OrderHeaders.Include(x => x.orderDetails).Where(x => x.UserId == userid && x.Email != null).OrderByDescending(x => x.OrderHeaderId).ToList();
                 }
                 _responseDto.Result = _mapper.Map<List<OrderHeaderDto>>(objList);
             }
@@ -184,7 +184,7 @@ namespace Microservices.Services.OrderAPI.Controllers
                     RewardsDto rewardsDto = new()
                     {
                         OrderId = orderHeader.OrderHeaderId,
-                        RewardsActivity = Convert.ToInt32(orderHeader.CartTotal),
+                        RewardsActivity = Convert.ToInt32(orderHeader.OrderTotal),
                         UserId = orderHeader.UserId
                     };
                     await messageBus.PublishMessage(rewardsDto, StaticClass.TopicName);
