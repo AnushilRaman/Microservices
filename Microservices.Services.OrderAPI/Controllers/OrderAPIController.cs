@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Stripe.Checkout;
 using Stripe;
+using Microsoft.EntityFrameworkCore;
 
 namespace Microservices.Services.OrderAPI.Controllers
 {
@@ -30,6 +31,50 @@ namespace Microservices.Services.OrderAPI.Controllers
             this.messageBus = messageBus;
             this._responseDto = new ResponseDto();
         }
+
+        [Authorize]
+        [HttpGet("GetOrders")]
+        public ResponseDto? GetOrders(string? userid = "")
+        {
+            try
+            {
+                IEnumerable<OrderHeader> objList;
+                if (User.IsInRole(StaticClass.RoleAdmin))
+                {
+                    objList = _appDbContext.OrderHeaders.Include(x => x.orderDetails).OrderByDescending(x => x.OrderHeaderId).ToList();
+                }
+                else
+                {
+                    objList = _appDbContext.OrderHeaders.Include(x => x.orderDetails).Where(x => x.UserId == userid).OrderByDescending(x => x.OrderHeaderId).ToList();
+                }
+                _responseDto.Result = _mapper.Map<List<OrderHeaderDto>>(objList);
+            }
+            catch (Exception ex)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = ex.Message;
+            }
+            return _responseDto;
+        }
+
+
+        [Authorize]
+        [HttpGet("GetOrder/{id:int}")]
+        public ResponseDto? GetOrder(int id)
+        {
+            try
+            {
+                OrderHeader orderHeader = _appDbContext.OrderHeaders.Include(x => x.OrderHeaderId).First(x => x.OrderHeaderId == id);
+                _responseDto.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
+            }
+            catch (Exception ex)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = ex.Message;
+            }
+            return _responseDto;
+        }
+
 
         [Authorize]
         [HttpPost("CreateOrder")]
@@ -154,5 +199,36 @@ namespace Microservices.Services.OrderAPI.Controllers
             return _responseDto;
         }
 
+        [Authorize]
+        [HttpPost("UpdateOrderStatus/{orderid:int}")]
+        public async Task<ResponseDto> UpdateOrderStatus(int orderid, [FromBody] string newStatus)
+        {
+            try
+            {
+                OrderHeader orderHeader = await _appDbContext.OrderHeaders.FirstAsync(x => x.OrderHeaderId == orderid);
+                if (orderHeader != null)
+                {
+                    if (newStatus == StaticClass.Status_Approved)
+                    {
+                        /// provide the refunds to the customer
+                        var options = new RefundCreateOptions
+                        {
+                            Reason = RefundReasons.RequestedByCustomer,
+                            PaymentIntent = orderHeader.PaymentIntentId,
+                        };
+                        var service = new RefundService();
+                        Refund refund = service.Create(options);
+                    }
+                    orderHeader.Status = newStatus;
+                    await _appDbContext.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = ex.Message;
+            }
+            return _responseDto;
+        }
     }
 }
