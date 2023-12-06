@@ -33,6 +33,34 @@ namespace Microservices.Web.Service
             });
         }
 
+        public async Task<ResponseDto?> GetAllOrder(string? userId)
+        {
+            return await baseService.SendAsync(new RequestDto()
+            {
+                apiType = SD.ApiType.GET,
+                Url = SD.OrderApiBase + "/" + SD.ApiName.api + "/" + SD.ApiName.OrderApi + "/GetOrders/"+ userId
+            });
+        }
+
+        public async Task<ResponseDto?> GetorderByid(int orderId)
+        {
+            return await baseService.SendAsync(new RequestDto()
+            {
+                apiType = SD.ApiType.GET,
+                Url = SD.OrderApiBase + "/" + SD.ApiName.api + "/" + SD.ApiName.OrderApi + "/GetOrder/" + orderId
+            });
+        }
+
+        public async Task<ResponseDto?> UpdateOrderStatus(int orderId, string newStatus)
+        {
+            return await baseService.SendAsync(new RequestDto()
+            {
+                apiType = SD.ApiType.POST,
+                Data = newStatus,
+                Url = SD.OrderApiBase + "/" + SD.ApiName.api + "/" + SD.ApiName.OrderApi + "/UpdateOrderStatus/"+ orderId
+            });
+        }
+
         public async Task<ResponseDto?> ValidateStripeSession(int orderHeaderId)
         {
             return await baseService.SendAsync(new RequestDto()
