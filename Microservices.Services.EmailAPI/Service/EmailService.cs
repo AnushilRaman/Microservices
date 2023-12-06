@@ -1,4 +1,5 @@
 ﻿using Microservices.Services.EmailAPI.Data;
+using Microservices.Services.EmailAPI.Messages;
 using Microservices.Services.EmailAPI.Models;
 using Microservices.Services.EmailAPI.Models.Dto;
 using Microservices.Services.EmailAPI.Service.IService;
@@ -39,6 +40,12 @@ namespace Microservices.Services.EmailAPI.Service
         {
             string message = "User registeration successful. <b/> : " + email;
             await LogAndEmail(message, email);
+        }
+
+        public async Task LogOrderPlaced(RewardMessage rewardMessageDto)
+        {
+            string message = "New Order Placed. <b/> OrderId: " + rewardMessageDto.OrderId;
+            await LogAndEmail(message, "Admin@gmail.com");
         }
 
         private async Task<bool> LogAndEmail(string message, string email)

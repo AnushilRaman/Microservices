@@ -21,6 +21,8 @@ builder.Services.AddSingleton(new EmailService(optionBuilder.Options));
 SD._serviceBusConnectionString = builder.Configuration["MessageServices:MessageBusConnectionString"];
 SD._emailCartQueue = builder.Configuration["TopicAndQueueNames:EmailShoppingCartQueue"];
 SD._emailregisterUserQueue = builder.Configuration["TopicAndQueueNames:EmailregisterUserQueue"];
+SD._emailOrderCreatedTopicName = builder.Configuration["TopicAndQueueNames:OrderCreatedTopic"];
+SD._emailOrderCreatedSubscription = builder.Configuration["TopicAndQueueNames:OrderCreated_Email_Subscription"];
 
 builder.Services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>();
 

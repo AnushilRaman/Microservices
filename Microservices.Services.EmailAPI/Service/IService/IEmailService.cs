@@ -1,4 +1,5 @@
-﻿using Microservices.Services.EmailAPI.Models.Dto;
+﻿using Microservices.Services.EmailAPI.Messages;
+using Microservices.Services.EmailAPI.Models.Dto;
 
 namespace Microservices.Services.EmailAPI.Service.IService
 {
@@ -6,5 +7,6 @@ namespace Microservices.Services.EmailAPI.Service.IService
     {
         Task EmailCartAndLog(CartDto cartDto);
         Task EmailNewUserAndLog(string email);
+        Task LogOrderPlaced(RewardMessage rewardMessageDto);
     }
 }

@@ -1,8 +1,6 @@
 ﻿using Azure.Messaging.ServiceBus;
 using Microservices.Services.RewardAPI.Messages;
-using Microservices.Services.RewardAPI.Models.Dto;
 using Microservices.Services.RewardAPI.Service;
-using Microservices.Services.RewardAPI.Service.IService;
 using Microservices.Services.RewardAPI.Utility;
 using Newtonsoft.Json;
 using System.Text;
@@ -11,9 +9,9 @@ namespace Microservices.Services.RewardAPI.Messaging
 {
     public class AzureServiceBusConsumer : IAzureServiceBusConsumer
     {
-        private readonly IRewardService _rewardService;
+        private readonly RewardService _rewardService;
         private ServiceBusProcessor _rewardProcessor;
-        public AzureServiceBusConsumer(IRewardService rewardService)
+        public AzureServiceBusConsumer(RewardService rewardService)
         {
             var client = new ServiceBusClient(SD._serviceBusConnectionString);
             _rewardProcessor = client.CreateProcessor(SD._orderCreatedTopic, SD._orderCreatedRewardSubscription);
