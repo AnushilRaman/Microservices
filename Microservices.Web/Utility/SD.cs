@@ -29,6 +29,11 @@
             ProductApi,
             AuthAPI
         }
+        public enum ContentType
+        {
+            Json,
+            MultipartFormData
+        }
 
         public enum ApiType
         {

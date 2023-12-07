@@ -21,7 +21,15 @@ namespace Microservices.Web.Service
             {
                 HttpClient httpClient = httpClientFactory.CreateClient("MicroserviceApi");
                 HttpRequestMessage message = new();
-                message.Headers.Add("Accept", "application/json");
+                if (requestDto.ContentType == Utility.SD.ContentType.MultipartFormData)
+                {
+                    message.Headers.Add("Accept", "*/*");
+                }
+                else
+                {
+                    message.Headers.Add("Accept", "application/json");
+                }
+
                 if (withBearer)
                 {
                     var token = tokenProvider.GetToken();
@@ -29,10 +37,33 @@ namespace Microservices.Web.Service
                 }
                 message.RequestUri = new Uri(requestDto.Url);
 
-                if (requestDto.Data != null)
+                if (requestDto.ContentType == Utility.SD.ContentType.MultipartFormData)
                 {
-                    message.Content = new StringContent(JsonConvert.SerializeObject(requestDto.Data), Encoding.UTF8, "application/json");
+                    var conten = new MultipartFormDataContent();
+                    foreach (var item in requestDto.Data.GetType().GetProperties())
+                    {
+                        var value = item.GetValue(requestDto.Data);
+                        if (value is FormFile)
+                        {
+                            var file = (FormFile)value;
+                            if (file != null)
+                            {
+                                conten.Add(new StreamContent(file.OpenReadStream()), item.Name, file.FileName);
+                            }
+                        }
+                    }
+                    message.Content = conten;
                 }
+                else
+                {
+                    if (requestDto.Data != null)
+                    {
+                        message.Content = new StringContent(JsonConvert.SerializeObject(requestDto.Data), Encoding.UTF8, "application/json");
+                    }
+                }
+
+
+                
                 HttpResponseMessage? apiResponse = null;
                 switch (requestDto.apiType)
                 {

@@ -19,7 +19,8 @@ namespace Microservices.Web.Service
             {
                 apiType = SD.ApiType.POST,
                 Data = ProductDto,
-                Url = SD.ProductApiBase + "/" + SD.ApiName.api + "/" + SD.ApiName.ProductApi
+                Url = SD.ProductApiBase + "/" + SD.ApiName.api + "/" + SD.ApiName.ProductApi,
+                ContentType = SD.ContentType.MultipartFormData
             });
         }
 
@@ -65,7 +66,8 @@ namespace Microservices.Web.Service
             {
                 apiType = SD.ApiType.PUT,
                 Data = ProductDto,
-                Url = SD.ProductApiBase + "/" + SD.ApiName.api + "/" + SD.ApiName.ProductApi
+                Url = SD.ProductApiBase + "/" + SD.ApiName.api + "/" + SD.ApiName.ProductApi,
+                ContentType = SD.ContentType.MultipartFormData
             });
         }
     }
