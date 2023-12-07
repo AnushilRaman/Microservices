@@ -102,13 +102,13 @@ namespace Microservices.Web.Controllers
                 switch (status)
                 {
                     case "approved":
-                        list = list.Where(x => x.Status == status);
+                        list = list.Where(x => x.Status.ToLower() == status.ToLower());
                         break;
                     case "readyforpickup":
-                        list = list.Where(x => x.Status == status);
+                        list = list.Where(x => x.Status.ToLower() == status.ToLower());
                         break;
                     case "cancelled":
-                        list = list.Where(x => x.Status == status);
+                        list = list.Where(x => x.Status.ToLower() == status.ToLower());
                         break;
                     default:
                         break;
