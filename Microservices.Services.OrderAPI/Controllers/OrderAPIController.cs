@@ -64,7 +64,7 @@ namespace Microservices.Services.OrderAPI.Controllers
         {
             try
             {
-                OrderHeader orderHeader = _appDbContext.OrderHeaders.Include(x => x.OrderHeaderId).First(x => x.OrderHeaderId == id);
+                OrderHeader orderHeader = _appDbContext.OrderHeaders.Include(x => x.orderDetails).First(x => x.OrderHeaderId == id);
                 _responseDto.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
             }
             catch (Exception ex)
@@ -208,7 +208,7 @@ namespace Microservices.Services.OrderAPI.Controllers
                 OrderHeader orderHeader = await _appDbContext.OrderHeaders.FirstAsync(x => x.OrderHeaderId == orderid);
                 if (orderHeader != null)
                 {
-                    if (newStatus == StaticClass.Status_Approved)
+                    if (newStatus == StaticClass.Status_Cancelled)
                     {
                         /// provide the refunds to the customer
                         var options = new RefundCreateOptions
