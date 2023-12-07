@@ -72,16 +72,20 @@ namespace Microservices.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> ProductEdit(ProductDto model)
         {
-            ResponseDto responseDto = await productService.UpdateProductsAsync(model);
-            if (responseDto != null && responseDto.IsSuccess)
+            if (ModelState.IsValid)
             {
-                TempData["successMessage"] = "Product Updated successfully";
-                return RedirectToAction(nameof(ProductIndex));
+                ResponseDto responseDto = await productService.UpdateProductsAsync(model);
+                if (responseDto != null && responseDto.IsSuccess)
+                {
+                    TempData["successMessage"] = "Product Updated successfully";
+                    return RedirectToAction(nameof(ProductIndex));
+                }
+                else
+                {
+                    TempData["errorMessage"] = responseDto?.Message;
+                }
             }
-            else
-            {
-                TempData["errorMessage"] = responseDto?.Message;
-            }
+            
             return View(model);
         }
         public async Task<IActionResult> ProductDelete(int productId)

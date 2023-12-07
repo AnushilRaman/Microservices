@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microservices.Web.Utility;
+using System.ComponentModel.DataAnnotations;
 
 namespace Microservices.Web.Models
 {
@@ -14,6 +15,7 @@ namespace Microservices.Web.Models
 
         [Range(1, 100)]
         public int Count { get; set; } = 1;
+        [AllowedCustomImageAnnotation(new string[] { ".jpg", ".png", ".jpeg" }, 1)]
         public IFormFile? Image { get; set; }
     }
 }
