@@ -87,7 +87,7 @@ namespace Microservices.Web.Controllers
 
 
         [HttpGet]
-        public IActionResult GetAll()
+        public IActionResult GetAll(string status)
         {
             IEnumerable<OrderHeaderDto> list;
             string userId = "";
@@ -99,6 +99,20 @@ namespace Microservices.Web.Controllers
             if (responseDto != null && responseDto.IsSuccess)
             {
                 list = JsonConvert.DeserializeObject<List<OrderHeaderDto>>(Convert.ToString(responseDto.Result));
+                switch (status)
+                {
+                    case "approved":
+                        list = list.Where(x => x.Status == status);
+                        break;
+                    case "readyforpickup":
+                        list = list.Where(x => x.Status == status);
+                        break;
+                    case "cancelled":
+                        list = list.Where(x => x.Status == status);
+                        break;
+                    default:
+                        break;
+                }
             }
             else
             {
