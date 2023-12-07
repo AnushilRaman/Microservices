@@ -39,7 +39,7 @@ namespace Microservices.Web.Service
 
                 if (requestDto.ContentType == Utility.SD.ContentType.MultipartFormData)
                 {
-                    var conten = new MultipartFormDataContent();
+                    var content = new MultipartFormDataContent();
                     foreach (var item in requestDto.Data.GetType().GetProperties())
                     {
                         var value = item.GetValue(requestDto.Data);
@@ -48,11 +48,15 @@ namespace Microservices.Web.Service
                             var file = (FormFile)value;
                             if (file != null)
                             {
-                                conten.Add(new StreamContent(file.OpenReadStream()), item.Name, file.FileName);
+                                content.Add(new StreamContent(file.OpenReadStream()), item.Name, file.FileName);
                             }
                         }
+                        else
+                        {
+                            content.Add(new StringContent(value == null ? "" : value.ToString()), item.Name);
+                        }
                     }
-                    message.Content = conten;
+                    message.Content = content;
                 }
                 else
                 {
@@ -63,7 +67,7 @@ namespace Microservices.Web.Service
                 }
 
 
-                
+
                 HttpResponseMessage? apiResponse = null;
                 switch (requestDto.apiType)
                 {

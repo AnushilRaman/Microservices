@@ -13,7 +13,7 @@ namespace Microservices.Web.Models
         public string? ImageLocalPath { get; set; }
 
         [Range(1, 100)]
-        public int Count { get; set; }
+        public int Count { get; set; } = 1;
         public IFormFile? Image { get; set; }
     }
 }

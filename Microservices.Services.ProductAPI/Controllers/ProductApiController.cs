@@ -16,7 +16,7 @@ namespace Microservices.Services.ProductAPI.Controllers
         private readonly IMapper _mapper;
         private ResponseDto _response;
 
-        public ProductApiController(AppDbContext appDbContext,IMapper mapper) 
+        public ProductApiController(AppDbContext appDbContext, IMapper mapper)
         {
             this._db = appDbContext;
             this._mapper = mapper;
@@ -24,7 +24,7 @@ namespace Microservices.Services.ProductAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ResponseDto> Get() 
+        public async Task<ResponseDto> Get()
         {
             try
             {
@@ -73,16 +73,35 @@ namespace Microservices.Services.ProductAPI.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles ="ADMIN")]
-        public async Task<ResponseDto> Post([FromBody] ProductDto productDto)
+        [Authorize(Roles = "ADMIN")]
+        public async Task<ResponseDto> Post(ProductDto productDto)
         {
             try
             {
-                Product obj = _mapper.Map<Product>(productDto);
-                await _db.Products.AddAsync(obj);
+                Product product = _mapper.Map<Product>(productDto);
+                await _db.Products.AddAsync(product);
                 await _db.SaveChangesAsync();
 
-                _response.Result = _mapper.Map<ProductDto>(obj);
+                if (productDto.Image != null)
+                {
+                    string fileName = product.ProductId + Path.GetExtension(productDto.Image.FileName);
+                    string filePath = @"wwwroot\ProductImages\" + fileName;
+                    var filePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+                    using (var fileStream = new FileStream(filePathDirectory, FileMode.Create))
+                    {
+                        await productDto.Image.CopyToAsync(fileStream);
+                    }
+                    var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
+                    product.ImageUrl = baseUrl + "/ProductImages/" + fileName;
+                    product.ImageLocalPath = filePath;
+                }
+                else
+                {
+                    product.ImageUrl = "https://placehold.co/600x400";
+                }
+                _db.Products.Update(product);
+                await _db.SaveChangesAsync();
+                _response.Result = _mapper.Map<ProductDto>(product);
             }
             catch (Exception ex)
             {
