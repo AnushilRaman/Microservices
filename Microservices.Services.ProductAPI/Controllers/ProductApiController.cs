@@ -141,10 +141,7 @@ namespace Microservices.Services.ProductAPI.Controllers
                     product.ImageUrl = baseUrl + "/ProductImages/" + fileName;
                     product.ImageLocalPath = filePath;
                 }
-                else
-                {
-                    product.ImageUrl = "https://placehold.co/600x400";
-                }
+                
                 _db.Products.Update(product);
                 await _db.SaveChangesAsync();
 

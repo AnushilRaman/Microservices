@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Microservices.Web.Utility
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -28,19 +29,22 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        <li class="dropdown">
-                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                                Content
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                <li>
-                                    <a class="dropdown-item" asp-controller="Coupon" asp-action="CouponIndex">Coupon List</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" asp-controller="Product" asp-action="ProductIndex">Product List</a>
-                                </li>
-                            </ul>
-                        </li>
+                        @if (User.IsInRole(SD.RoleAdmin))
+                        {
+                            <li class="dropdown">
+                                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Content
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Coupon" asp-action="CouponIndex">Coupon List</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Product" asp-action="ProductIndex">Product List</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
                         <li>
                             <a class="nav-link" asp-controller="Order" asp-action="OrderIndex">Order List</a>
                         </li>

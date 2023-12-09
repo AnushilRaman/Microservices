@@ -48,7 +48,7 @@ namespace Microservices.Web.Service
             {
                 apiType = SD.ApiType.POST,
                 Data = cartDetailsid,
-                Url = SD.CartApiBase + "/" + SD.ApiName.api + "/" + SD.ApiName.CartApi + "/RemoveCoupon"
+                Url = SD.CartApiBase + "/" + SD.ApiName.api + "/" + SD.ApiName.CartApi + "/RemoveCart"
             });
         }
 
