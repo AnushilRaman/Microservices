@@ -66,11 +66,18 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI();
+//}
+app.UseSwagger();
+app.UseSwaggerUI(option =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    option.SwaggerEndpoint("/swagger/v1/swagger.json", "Order Api");
+    option.RoutePrefix = string.Empty;
+});
+
 Stripe.StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Value;
 
 app.UseHttpsRedirection();
